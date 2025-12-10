@@ -1,12 +1,12 @@
 # Welcome!
 ## BPS (Bicodo Postal Services) Operations Management System
 
-IDOP - Bicodo Postal Services is a logistics drop-off point handling transactions for platforms like Shopee and Lazada. While their parcel throughput is high, their internal administrative processes are currently disjointed and manual.
+IDOP - Bicodo Postal Services is a logistics drop-off point handling transactions for platforms like Shopee and Lazada. Their internal administrative processes are currently disjointed and manual.
 
-We have identified three key administrative bottlenecks that this system aims to resolve:
+We have identified three key administrative features that this system aims to resolve:
 - Fragmented Seller Data: Critical contact details for their partner sellers are currently stored in the owner's personal mobile phone contacts. This makes the data inaccessible to other staff and difficult to manage or search.
-- Unmanaged Internal Inventory: The business relies on office supplies (tape, markers, thermal paper, waybills) to operate. Currently, there is no tracking for these items, leading to stock shortages that can disrupt daily operations.
-- Manual Sales Calculation: Revenue tracking is done manually, making it tedious to generate weekly or monthly performance reports.
+- Unmanaged Internal Inventory: The business relies on office supplies (tape, markers, waybills) to operate. Currently, there is no tracking for these items, leading to stock shortages that can disrupt daily operations.
+- Manual Sales Calculation: Revenues can be viewed at the system of Lazada/Shoppee but it can't track it, making it tedious to generate weekly or monthly performance reports.
 
 ### A. General Features
 - A secure login system that differentiates between Administrator (Owner) and Staff accounts to control access levels.
