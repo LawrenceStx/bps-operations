@@ -5,6 +5,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CONSTANTS
     const loginForm = document.querySelector('#login-form')
+    const navigationBar = document.querySelector('.nav-wrapper')
+    const contentDiv = document.querySelector('#content')
+
+
+
+
+
+    // (NAVIGATION)
+    if(navigationBar) {
+        navigationBar.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            const target = e.target
+            
+            if(target.id === 'nav-accounts') {
+                render.renderManageUsers(contentDiv);
+            }
+
+            activePage(target.id)
+        })
+    }
+
+
+    // (HELPERS)
+    function activePage(id) {
+        localStorage.setItem('activePage', JSON.stringify(id))
+    }
+
+    function renderActive() {
+        const savedActive = JSON.parse(localStorage.getItem('activePage'))
+        navigateTo(savedActive)
+    }
+    renderActive()
+
+    function navigateTo(savedActive) {
+        if(savedActive === "nav-accounts") {
+            render.renderManageUsers(contentDiv);
+        } 
+    }
 	
 
     // (AUTH) Login
