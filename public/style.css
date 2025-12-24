@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid red;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    flex-shrink: 0;
+    flex-basis: 300px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nav-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 2;
+}
+
+.nav-item {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item:hover {
+    background-color: gray;
+    color: white;
+}
+
+.sidebar-footer button {
+    min-width: 100%;
+    padding: 5px;
+}
+
+.main {
+    flex-grow: 1;
+}
