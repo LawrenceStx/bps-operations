@@ -46,3 +46,7 @@
     flex-grow: 1;
     padding: 15px;
 }
+
+#user-form, #user-update-form {
+    display: none;
+}

@@ -164,4 +164,18 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { login, getAllUsers, createUser, updateUser, deleteUser }
+const getUser = async(req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await get(`
+            SELECT id, username, email, role_id, is_active, created_at FROM users
+            WHERE id = ?    
+        `, [id])
+
+        res.status(200).json({success:true,data:user})
+    } catch(err) {
+        res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`})
+    }
+}
+
+module.exports = { login, getAllUsers, createUser, updateUser, deleteUser, getUser }
