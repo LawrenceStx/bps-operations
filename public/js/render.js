@@ -1,28 +1,28 @@
 
 
-export function renderManageUsers(contentDiv) {
+export function renderManageUsers(contentDiv, data) {
     contentDiv.innerHTML = ''
 
     let content = '';
 
     // mock table
-    const data = [
-        {
-            id: 1,
-            username: "mark",
-            email: "marklawrence@gmail.com",
-            role_id: 2,
-            created_at: "12-05-25"
-        },
-        {
-            id: 2,
-            username: "ryan",
-            email: "ryanterrado@gmail.com",
-            role_id: 2,
-            created_at: "12-05-25"
-        }
-    ]
-
+    // const data = [
+    //     {
+    //         id: 1,
+    //         username: "mark",
+    //         email: "marklawrence@gmail.com",
+    //         role_id: 2,
+    //         created_at: "12-05-25"
+    //     },
+    //     {
+    //         id: 2,
+    //         username: "ryan",
+    //         email: "ryanterrado@gmail.com",
+    //         role_id: 2,
+    //         created_at: "12-05-25"
+    //     }
+    // ]
+    console.log(data)
     data.forEach(item => {
         content += `
             <tr data-id=${item.id}>
@@ -44,6 +44,7 @@ export function renderManageUsers(contentDiv) {
     contentDiv.innerHTML = `
         <h1>Manage Users</h1>
 
+        <button id="add-user">Add New</button>
         <table>
             <thead>
                 <tr>
@@ -59,5 +60,15 @@ export function renderManageUsers(contentDiv) {
                 ${content}
             </tbody>
         </table>
+    `
+}
+
+export function renderDashboard(contentDiv) {
+    contentDiv.innerHTML = '';
+
+    contentDiv.innerHTML = `
+        <h1>Dashboard</h1>
+
+        yo
     `
 }

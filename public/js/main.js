@@ -8,19 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const navigationBar = document.querySelector('.nav-wrapper')
     const contentDiv = document.querySelector('#content')
 
-
+    // GENERAL VARIABLES
 
 
 
     // (NAVIGATION)
+    // Pag may new page
+    // 1. Set yung event dito
     if(navigationBar) {
-        navigationBar.addEventListener('click', (e) => {
+        navigationBar.addEventListener('click', async (e) => {
             e.preventDefault()
 
             const target = e.target
             
             if(target.id === 'nav-accounts') {
-                render.renderManageUsers(contentDiv);
+                const token = JSON.parse(localStorage.getItem('token'))
+                let data = await api.getAllUsers(token)
+                render.renderManageUsers(contentDiv, data);
+            } else if(target.id === 'nav-dashboard') {
+                render.renderDashboard(contentDiv);
             }
 
             activePage(target.id)
@@ -32,18 +38,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function activePage(id) {
         localStorage.setItem('activePage', JSON.stringify(id))
     }
-
     function renderActive() {
-        const savedActive = JSON.parse(localStorage.getItem('activePage'))
-        navigateTo(savedActive)
+        const savedActive = JSON.parse(localStorage.getItem('activePage')) || null;
+        if(savedActive !== null) {
+            navigateTo(savedActive)
+        } else {
+            navigateTo("nav-dashboard")
+        }
     }
-    renderActive()
-
+    renderActive();
+    // 2. Set ng endpoint dito
+    // END
     function navigateTo(savedActive) {
         if(savedActive === "nav-accounts") {
             render.renderManageUsers(contentDiv);
+        } else if(savedActive === "nav-dashboard") {
+            render.renderDashboard(contentDiv);
         } 
     }
+
+    async function renderAlways() {
+        try {
+            if(JSON.parse(localStorage.getItem('activePage')) === 'nav-accounts'){
+                const token = JSON.parse(localStorage.getItem('token'))
+                let data = await api.getAllUsers(token)
+                render.renderManageUsers(contentDiv, data);
+            }
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    renderAlways()
+
+
+
+
+
+
 	
 
     // (AUTH) Login

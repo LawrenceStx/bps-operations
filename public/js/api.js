@@ -21,3 +21,24 @@ export async function login(credentials) {
 	
 	return result.data
 }
+// (AUTH) Get all users
+export async function getAllUsers(token) {
+	const response = await fetch('/api/auth/', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+		}
+	})
+	
+	if(!response.ok) {
+		throw new Error('Error getting all users.')
+	}
+	
+	const result = await response.json()
+	if(!result.success) {
+		throw new Error(result.data)
+	}
+	
+	return result.data
+}
