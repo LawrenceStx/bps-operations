@@ -135,7 +135,8 @@ const updateUser = async (req, res) => {
                 email = COALESCE(?, email),
                 role_id = COALESCE(?, role_id),
                 is_active = COALESCE(?, is_active)
-        `, [username, password, email, role_id, is_active])
+            WHERE id = ?
+        `, [username, password, email, role_id, is_active, id])
 
         await logAudit(req.user.id, 'UPDATE', 'users', id, `Updated profile for user ID:${id}`, req.ip);
 
