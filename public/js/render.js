@@ -176,7 +176,7 @@ export function renderDashboard(contentDiv) {
     contentDiv.innerHTML = '';
 
     contentDiv.innerHTML = `
-        <h1>Dashboard</h1>
+        <h1 class="camacho">Dashboard</h1>
 
         yo
     `

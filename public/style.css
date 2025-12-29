@@ -50,3 +50,11 @@
 #user-form, #user-update-form {
     display: none;
 }
+
+.camacho {
+    color: red;
+}
+
+#users-table {
+    border: 1px solid black;
+}
