@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // *********** CONSTANTS *************
     const loginForm = document.querySelector('#login-form');
-
+    const logoutBtn = document.querySelector('#logout-button');
 
 
 
@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
+    // (AUTH) LOGOUT
+    if(logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            if(confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                location.reload();
+            }
+        })
+    }
     // (AUTH) Gatekeeper
     if(!(window.location.pathname.endsWith('index.html'))) {
         // TODO: create a api/controller that checks if the token is verified/valid and put it on else statement.
@@ -46,5 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
 
         }
+    }
+    if(window.location.pathname.endsWith('index.html') && localStorage.getItem('token')) {
+        alert("You have an existing session. Logging in.");
+        location.href = 'dashboard.html';
     }
 })
