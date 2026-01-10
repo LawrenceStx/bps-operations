@@ -7,18 +7,18 @@ const login = async (req, res) => {
     try {
 
         // Get the credentials
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
         // 1. VALIDATE
-        if(!username || !password) {
-            return res.status(400).json({success:false,data:"Username and password are required."});
+        if(!email || !password) {
+            return res.status(400).json({success:false,data:"Email and password are required."});
         }
 
         // 2. CHECK IF USER EXISTS
-        const user = await get("SELECT * FROM users WHERE username = ?", [username]);
+        const user = await get("SELECT * FROM users WHERE email = ?", [email]);
 
         if(!user) {
-            return res.status(401).json({success:false,data:"Invalid username or password."});
+            return res.status(401).json({success:false,data:"Invalid email or password."});
         }
 
         // 3. CHECK IF ACCOUNT IS ACTIVE
@@ -30,12 +30,12 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password_hash);
 
         if(!isMatch) {
-            return res.status(401).json({success:false,data:"Invalid username or password."})
+            return res.status(401).json({success:false,data:"Invalid email or password."})
         }
 
         // 5. GENERATE JWT TOKEN
         const token = jwt.sign(
-            {id: user.id, username: user.username, role_id: user.role_id },
+            {id: user.id, email: user.email, role_id: user.role_id },
             process.env.JWT_SECRET || 'fallback_secret',
             { expiresIn: '8h' }
         )
@@ -63,7 +63,7 @@ const login = async (req, res) => {
 
     } catch(error) {
         console.error("LOGIN ERROR: ", error);
-        res.status(500).json({success:false,data:"Internal Server Error"})
+        res.status(500).json({success:false,data:`Internal Server Error: ${error.message}`})
     }
 }
 
