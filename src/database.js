@@ -228,7 +228,7 @@ const initDB = () => {
                 if(err) {
                     console.error(err.message);
                 } else {
-                    console.log("Admin account created! Username admin, Password: " + password);
+                    console.log("Admin account created! Email admin@bps.com, Password: " + password);
                 }
             })
         }

@@ -1,143 +1,200 @@
-import * as render from './render.js'
 import * as api from './api.js'
+import * as render from './render.js'
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // CONSTANTS
-    const loginForm = document.querySelector('#login-form')
-    const contentDiv = document.querySelector('#content')
-    const navWrapper = document.querySelector('.nav-wrapper')
+
+    // *********** CONSTANTS *************
+    const loginForm = document.querySelector('#login-form');
+    const accountForm = document.querySelector('#account-form');
+
+    const logoutBtn = document.querySelector('#logout-button');
+    const createAccountBtn = document.querySelector('#create-account-btn');
+    const cancelAccountBtn = document.querySelector('#cancel-account-btn');
+
+    const accountListDiv = document.querySelector('#account-list');
 
 
-    // GENERAL VARIABLES
-    // Pag may bagong page, 1. DAGDAG mo sa switch case
-    const router = async () => {
-        const hash = window.location.hash || '#dashboard';
 
-        // Update Sidebar Active State
-        updateActiveSidebar(hash);
-
-        contentDiv.innerHTML = '<div>Loading data..</div>';
-
+    // *********** RENDERERS *************
+    async function loadAccounts() {
         try {
-            switch(hash) {
-                case '#dashboard':
-                    render.renderDashboard(contentDiv);
-                    break;
-                case '#accounts':
-                    const token = JSON.parse(localStorage.getItem('token'))
-                    const users = await api.getAllUsers(token)
-                    render.renderManageUsers(contentDiv, users)
-                    break;
-                default:
-                    contentDiv.innerHTML = `<h1>Not Found 404</h1>`
-            }
-        } catch(err) {
-            console.error(err)
-            if(err.message.includes("Unauthorized") || err.message.includes("token")) {
-                alert("Session expired. Please login again.")
+            const token = JSON.parse(localStorage.getItem('token'));
+			const result = await api.getAllAccounts(token);
+			render.renderAccountsTable(result, accountListDiv);
+		} catch(err) {
+            alert(`Error: ${err.message}`);
+			if(err.message === "Invalid or expired token.") {
                 localStorage.removeItem('token')
-                location.href = 'index.html'
-            } else {
-                contentDiv.innerHTML = `<p>Error loading data ${err.message}</p>`
+                location.href = 'index.html';
             }
-        }
+		}
     }
 
-    const updateActiveSidebar = (hash) => {
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => item.classList.remove('active'));
 
-        const hashToId = {
-            '#dashboard': 'nav-dashboard',
-            '#accounts': 'nav-accounts',
-            '#audit': 'nav-audit',
-            '#inventory': 'nav-inventory',
-            '#inventory-cat': 'nav-inventory-cat',
-            '#sellers': 'nav-sellers',
-            '#rts': 'nav-rts',
-            '#documents': 'nav-documents',
-            '#sales': 'nav-sales'
-        };
-
-        const activeId = hashToId[hash];
-        if (activeId) {
-            const activeItem = document.getElementById(activeId);
-            if (activeItem) activeItem.classList.add('active');
-        }
-    }
-
-    window.addEventListener('hashchange', router)
-    router();
-
-
-    // (NAVIGATION)
-    if(navWrapper) {
-        navWrapper.addEventListener('click', (e) => {
+    // *********** ACCOUNTS/AUTHENTICATION *************
+    // (AUTH) LOGIN
+    if(loginForm) {
+        console.log(loginForm)
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const navItem = e.target.closest('.nav-item')
-            console.log(navItem)
+            const credentials = {
+                email: loginForm.querySelector('#login-email').value.trim(),
+                password: loginForm.querySelector('#login-password').value.trim()
+            }
 
-            // 2. dagdag mo rito pangalawa
-            if(navItem) {
-                const idToHash = {
-                    'nav-dashboard': 'dashboard',
-                    'nav-audit': 'audit',
-                    'nav-inventory': 'inventory',
-                    'nav-inventory-cat': 'inventory-cat',
-                    'nav-sellers': 'sellers',
-                    'nav-rts': 'rts',
-                    'nav-documents': 'documents',
-                    'nav-sales': 'sales',
-                    'nav-accounts': 'accounts'
+            try {
+                const data = await api.loginAccount(credentials);
+                localStorage.setItem('token', JSON.stringify(data.token));
+                alert(`User ${data.user.username} successfully logged in.`);
+
+                loginForm.reset();
+                location.href = 'dashboard.html';
+            } catch(err) {
+                alert(`Error: ${err.message}`)
+            }
+        })
+    }
+    // (AUTH) LOGOUT
+    if(logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            if(confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                location.reload();
+            }
+        })
+    }
+    // (AUTH) CREATE/UPDATE
+    if(createAccountBtn) {
+        createAccountBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            accountForm.reset();
+            accountForm.style.display = "block"
+            cancelAccountBtn.style.display = "block"
+            accountForm.querySelector('#form-title').innerText = "Create New Account"
+        })
+    }
+    if(cancelAccountBtn) {
+        cancelAccountBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            accountForm.reset();
+            accountForm.style.display = "none"
+            cancelAccountBtn.style.display = "none"
+        })
+    }
+    if(accountForm) {
+        // Prevent emoji in input tags
+        const usernameTextbox = accountForm.querySelector('#account-username');
+        if(usernameTextbox) {
+            usernameTextbox.addEventListener( "input", event => {
+                const target = event.target;
+                const regex = /[^\p{L}\p{N}\p{P}\p{Z}\s]/gu; 
+
+                if (regex.test(target.value)) {
+                    target.value = target.value.replace(regex, '');
+                }
+            }, false);
+        }
+
+        // CREATE/UPDATE Form
+        accountForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            try {
+                const data = {
+                    username: accountForm.querySelector('#account-username').value.trim() || null,
+                    email: accountForm.querySelector('#account-email').value.trim() || null,
+                    role_id: accountForm.querySelector('#account-role').value || null,
+                    password: accountForm.querySelector('#account-password').value.trim() || null
                 }
 
-                const targetHash = idToHash[navItem.id]
-                if(targetHash) {
-                    window.location.hash = targetHash
+                const user_id = accountForm.querySelector('#account-id').value;
+                const token = JSON.parse(localStorage.getItem('token'));
+                if(user_id) {
+                    await api.updateAccount(data, token, user_id);
+                    alert("Account updated successfully!");
+                } else {
+                    await api.createAccount(data, token);
+                    alert("Account created successfully!");
+                }
+
+                location.reload();
+                accountForm.reset();
+            } catch(err) {
+                alert(`Error: ${err.message}`);
+            }
+        })
+    }
+    // (AUTH) TABLE EVENT LISTENER (UPDATE/DELETE)
+    if(accountListDiv) {
+        loadAccounts();
+
+        accountListDiv.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const row = e.target.closest('tr');
+            const account_id = row.dataset.id;
+            const token = JSON.parse(localStorage.getItem('token'));
+
+            if(e.target.classList.contains('edit-btn')) {
+                accountForm.reset();
+                accountForm.style.display = "block"
+                cancelAccountBtn.style.display = "block"
+
+                const account = await api.getAccount(account_id, token)
+                accountForm.querySelector('#form-title').innerText = "Update Existing Account"
+
+                accountForm.querySelector('#account-username').value = account.username
+                accountForm.querySelector('#account-email').value = account.email
+                accountForm.querySelector('#account-role').value = account.role === 1 ? "1" : "2"; 
+                accountForm.querySelector('#account-password').value = "";
+                accountForm.querySelector('#account-id').value = account.id;
+            }
+
+            if(e.target.classList.contains('delete-btn')) {
+                if(confirm("Are you sure you want to delete this account?")) {
+                    try {
+                        await api.deleteAccount(account_id, token)
+                        location.reload()
+                    } catch(err) {
+                        alert(`Error: ${err.message}`)
+                    }
+                }
+            }
+
+            if(e.target.classList.contains('disable-btn')) {
+                if(confirm("Are you sure you want to disable this account?")) {
+                    try {
+                        await api.disableAccount(account_id, token)
+                        location.reload()
+                    } catch(err) {
+                        alert(`Error: ${err.message}`)
+                    }
                 }
             }
         })
     }
-
-    // (HELPERS)
     
 
 
+    // (AUTH) Gatekeepers
+    if(!(window.location.pathname.endsWith('index.html'))) {
+        // TODO: create a api/controller that checks if the token is verified/valid and put it on else statement.
 
+        if(!localStorage.getItem('token')) {
+            alert('You must be logged in to view this page. Redirecting..')
+            window.location.href = 'index.html'
+        } else {
 
-
-
-	
-
-    // (AUTH) Login
-	if(loginForm) {
-		loginForm.addEventListener('submit', async (e) => {
-			e.preventDefault()
-			
-			const credentials = {
-				username: document.querySelector('#account-username').value.trim(),
-				password: document.querySelector('#account-password').value.trim()
-			}
-			
-			try {
-				const data = await api.login(credentials)
-				alert('Logged in successfully!')
-				
-                localStorage.setItem('token', JSON.stringify(data.token));
-				loginForm.reset()
-                location.href = "dashboard.html"
-			}
-			catch(err) {
-				console.error(err)
-			} 
-		})
-	}
-
-    // (AUTH) Gatekeeper
-    if(!(window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('login.html')) && !localStorage.getItem('token')) {
-        alert('You must be logged in to view this page. Redirecting..')
-        window.location.href = 'index.html'
+        }
+    }
+    if(window.location.pathname.endsWith('index.html') && localStorage.getItem('token')) {
+        alert("You have an existing session. Logging in.");
+        location.href = 'dashboard.html';
     }
 })

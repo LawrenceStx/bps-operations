@@ -1,150 +1,121 @@
-
-
 // (AUTH) Login
-export async function login(credentials) {
-	const response = await fetch('/api/auth/login', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(credentials)
-	})
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error logging in.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
-}
-// (AUTH) Get all users
-export async function getAllUsers(token) {
-	const response = await fetch('/api/auth/', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-		}
-	})
-
-    if(response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized.')
-    }
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error getting all users.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
-}
-// (AUTH) Delete user
-export async function deleteUser(token, user_id) {
-	const response = await fetch(`/api/auth/${user_id}`, {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-		}
-	})
-
-    if(response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized.')
-    }
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error deleting user.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
-}
-// (AUTH) Create user
-export async function createUser(token, credentials) {
-	const response = await fetch(`/api/auth`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-		},
+export async function loginAccount(credentials) {
+    const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(credentials)
-	})
+    })
 
-    if(response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized.')
+    const result = await response.json();
+    if(!result.success) {
+        throw new Error(result.data);
     }
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error creating user.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
+
+    return result.data;
 }
-// (AUTH) Get user
-export async function getUser(token, user_id) {
-	const response = await fetch(`/api/auth/${user_id}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
+// (AUTH) Create Account
+export async function createAccount(data, token) {
+    const response = await fetch('/api/auth/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-		}
-	})
+        },
+        body: JSON.stringify(data)
+    })
 
-    if(response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized.')
+    const result = await response.json();
+    if(!result.success) {
+        throw new Error(result.data);
     }
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error creating user.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
+
+    return result.data;
 }
-// (AUTH) Update user
-export async function updateUser(token, credentials, user_id) {
-    const response = await fetch(`/api/auth/${user_id}`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-		},
-        body: JSON.stringify(credentials)
-	})
+// (AUTH) Get All Accounts
+export async function getAllAccounts(token) {
+    const response = await fetch('/api/auth', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    })
 
-    if(response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized.')
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
     }
-	
-	// if(!response.ok) {
-	// 	throw new Error('Error creating user.')
-	// }
-	
-	const result = await response.json()
-	if(!result.success) {
-		throw new Error(result.data)
-	}
-	
-	return result.data
+
+    return result.data;
+}
+// (AUTH) Get Account
+export async function getAccount(id, token) {
+    const response = await fetch(`/api/auth/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (AUTH) Update Account
+export async function updateAccount(data, token, id) {
+    const response = await fetch(`/api/auth/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (AUTH) Delete Account
+export async function deleteAccount(id, token) {
+    const response = await fetch(`/api/auth/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (AUTH) Disable Account
+export async function disableAccount(id, token) {
+    const response = await fetch(`/api/auth/disable/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
 }
