@@ -227,3 +227,20 @@ export async function createInventory(formData) {
 
     return result.data
 }
+// (INVENTORY) Delete Inventory Category
+export async function deleteInventory(id, token) {
+    const response = await fetch(`/api/inventory/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}

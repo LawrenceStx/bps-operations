@@ -298,6 +298,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // (INVENTORY) TABLE EVENT LISTENER (UPDATE/DELETE)
     if(inventoryListDiv) {
         loadData(api.getAllInventory, render.renderInventoryTable, inventoryListDiv);
+
+        inventoryListDiv.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const row = e.target.closest('tr');
+            const inventory_id = row.dataset.id;
+            const token = JSON.parse(localStorage.getItem('token'));
+
+            if(e.target.classList.contains('delete-btn')) {
+                if(confirm("Are you sure you want to delete this inventory item?")) {
+                    try {
+                        await api.deleteInventory(inventory_id, token)
+                        location.reload()
+                    } catch(err) {
+                        alert(`Error: ${err.message}`)
+                    }
+                }
+            }
+        })
     }
 
 

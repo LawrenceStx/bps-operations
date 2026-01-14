@@ -86,11 +86,33 @@ const createInventory = async (req, res) => {
         const params = [name, category_id, quantity, min_stock_level, imageUrl, staff_id];
 
         const result = await run(query, params);
+
+        await logAudit(req.user.id, 'CREATE', 'inventory', result.lastID, `Created inventory item ${name}`, req.ip);
+
         res.status(200).json({
             success:true,
             data:"Inventory item successfully created.",
             id:result.lastID
         });
+    } catch(err) {
+        res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`});
+    }
+}
+const deleteInventory = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if(!id) {
+            return res.status(400).json({success:false,data:"ID is required."});
+        }
+
+        const result = await run(`
+            DELETE FROM inventory WHERE id = ?    
+        `, [id]);
+
+        await logAudit(req.user.id, 'DELETE', 'inventory', result.lastID, `Delete inventory item no.${id}`, req.ip);
+        
+        res.status(200).json({success:true,data:"Deleted inventory item successfully.",id:result.id});
     } catch(err) {
         res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`});
     }
@@ -103,5 +125,6 @@ module.exports = {
     getAllInventoryCategories,
 
     getAllInventory,
-    createInventory
+    createInventory,
+    deleteInventory
 }

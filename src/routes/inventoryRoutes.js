@@ -10,5 +10,6 @@ router.delete('/category/:id', verifyToken, inventoryController.deleteInventoryC
 
 router.get('/', verifyToken, inventoryController.getAllInventory);
 router.post('/', verifyToken, upload.single('image'), inventoryController.createInventory);
+router.delete('/:id', verifyToken, inventoryController.deleteInventory);
 
 module.exports = router;
