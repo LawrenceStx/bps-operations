@@ -149,7 +149,6 @@ export function renderInventoryTable(result, container) {
                 <div class="action-buttons">
                     <button class='btn edit-btn'>Edit</button>
                     <button class='btn delete-btn'>Delete</button>
-                    <button class='btn disable-btn'>Disable</button>
                 </div>
             </td>
         `;

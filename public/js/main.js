@@ -10,12 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.querySelector('#login-form');
     const accountForm = document.querySelector('#account-form');
     const inventoryCategoryForm = document.querySelector('#inventory-category-form');
+    const inventoryForm = document.querySelector('#inventory-form');
 
     const logoutBtn = document.querySelector('#logout-button');
     const createAccountBtn = document.querySelector('#create-account-btn');
     const cancelAccountBtn = document.querySelector('#cancel-account-btn');
     const createInventoryCategoryBtn = document.querySelector('#create-inventory-category-btn');
     const cancelInventoryCategoryBtn = document.querySelector('#cancel-inventory-category-btn');
+    const createInventoryBtn = document.querySelector('#create-inventory-btn');
+    const cancelInventoryBtn = document.querySelector('#cancel-inventory-btn');
 
     const accountListDiv = document.querySelector('#account-list');
     const inventoryCategoriesListDiv = document.querySelector('#inventory-category-list');
@@ -315,6 +318,70 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert(`Error: ${err.message}`)
                     }
                 }
+            }
+        })
+    }
+    // (INVENTORY) CREATE
+    if(createInventoryBtn) {
+        createInventoryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            inventoryForm.reset();
+            inventoryForm.style.display = "block";
+            cancelInventoryBtn.style.display = "block";
+            inventoryForm.querySelector('#form-title').innerText = "Create New Inventory Item";
+        })
+    }
+    if(cancelInventoryBtn) {
+        cancelInventoryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            inventoryForm.reset();
+            inventoryForm.style.display = "none";
+            cancelInventoryBtn.style.display = "none";
+        })
+    }
+    if(inventoryForm) {
+        inventoryForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                let formData = new FormData();
+
+                const name = inventoryForm.querySelector('#inventory-name').value
+                if(name) formData.append('name', name)
+                
+                const category_id = inventoryForm.querySelector('#inventory-category').value
+                if(category_id) formData.append('category_id', category_id)
+
+                const quantity = inventoryForm.querySelector('#inventory-quantity').value
+                if (quantity) formData.append('quantity', quantity)
+                
+                const min_stock_level = inventoryForm.querySelector('#inventory-minstock').value
+                if(min_stock_level) formData.append('min_stock_level', min_stock_level) 
+
+                const staff_id = currentAccount.id
+                if(staff_id) formData.append('staff_id', staff_id) 
+
+
+                const fileInput = inventoryForm.querySelector('#inventory-image')
+                if(fileInput.files[0]) {
+                    formData.append('image', fileInput.files[0])
+                }
+
+                const id = inventoryForm.querySelector('#inventory-id').value;
+                const token = JSON.parse(localStorage.getItem('token'));
+
+                if(id) {
+                    return
+                } else {
+                    await api.createInventory(formData, token)
+                    alert('Inventory item created successfully!')
+                }
+                
+
+                location.reload();
+            } catch(err) {
+                alert(`Error: ${err.message}`)
             }
         })
     }

@@ -72,7 +72,6 @@
                             <form id="inventory-category-form">
                                 <h3 id="form-title">Create New Inventory Category</h3>
 
-                                <input type="text" id="staff-id" style="display: none;">
                                 <input type="text" id="inventory-category-id" style="display: none;">
 
                                 <div class="form-item">
@@ -97,8 +96,46 @@
                 </div>
 
                 <div class="inventory-wrapper">
-                    <button id="create-inventory-btn">Add New Item</button>
-                    <form id="inventory-form"></form>
+                    <div class="inventory-form-wrapper">
+                        <button id="create-inventory-btn">Add New Item</button>
+                        
+                        <div class="form-wrapper">
+                            <form id="inventory-form">
+                                <h3 id="form-title">Create New Inventory Category</h3>
+
+                                <input type="text" id="inventory-id" style="display: none;">
+
+                                <div class="form-item">
+                                    <label>Name</label>
+                                    <input type="text" id="inventory-name" placeholder="Enter inventory item name..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Inventory Category</label>
+                                    <input type="text" id="inventory-category" placeholder="Enter inventory category..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Quantity</label>
+                                    <input type="text" id="inventory-quantity" placeholder="Enter inventory quantity..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Minimum Stock Level</label>
+                                    <input type="text" id="inventory-minstock" placeholder="Enter minimum stock level..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Image</label>
+                                    <input type="file" id="inventory-image" accept="image/*">
+                                    <img src="" class="inventory-image" style="height: 100px; display: none;"/>
+                                </div>
+
+                                <button type="submit">Submit</button>
+                                <button type="button" id="cancel-inventory-btn">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
                     <div id="inventory-list">
 
                     </div>

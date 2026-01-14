@@ -74,8 +74,8 @@ const createInventory = async (req, res) => {
             return res.status(400).json({success:false,data:"No image file uploaded."});
         }
 
-        if(!name || !category_id || !quantity || !min_stock_level) {
-            return res.status(400).json({success:false,data:"All fields required."});
+        if(!name || !category_id || !quantity || !min_stock_level || !staff_id) {
+            return res.status(400).json({success:false,data:`All fields required. ${name, category_id, quantity, min_stock_level, staff_id}`});
         }
 
         const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`

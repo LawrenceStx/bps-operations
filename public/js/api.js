@@ -214,9 +214,12 @@ export async function getAllInventory(token) {
     return result.data;
 }
 // (INVENTORY) Create Inventory
-export async function createInventory(formData) {
+export async function createInventory(formData, token) {
     const response = await fetch('/api/inventory', {
         method: 'POST',
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        },
         body: formData
     })
 
