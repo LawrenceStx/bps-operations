@@ -54,8 +54,24 @@ const getAllInventoryCategories = async (req, res) => {
 }
 
 
+// Inventory
+const getAllInventory = async (req, res) => {
+    try {
+        const inventory = await all(`
+            SELECT id, name, category_id, quantity, min_stock_level, image_url FROM inventory
+        `)
+
+        res.status(200).json({success:true,data:inventory})
+    } catch(err) {
+        res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`})
+    }
+}
+
+
 module.exports = {
     createInventoryCategory,
     deleteInventoryCategory,
-    getAllInventoryCategories
+    getAllInventoryCategories,
+
+    getAllInventory
 }

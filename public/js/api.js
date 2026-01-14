@@ -195,3 +195,20 @@ export async function deleteInventoryCategory(id, token) {
 
     return result.data;
 }
+// (INVENTORY) Get All Inventory
+export async function getAllInventory(token) {
+    const response = await fetch('/api/inventory/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}

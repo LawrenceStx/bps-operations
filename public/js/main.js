@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const accountListDiv = document.querySelector('#account-list');
     const inventoryCategoriesListDiv = document.querySelector('#inventory-category-list');
+    const inventoryListDiv = document.querySelector('#inventory-list');
 
 
 
@@ -221,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // *********** INVENTORY *************
-    // (INVENTORY) CREATE
+    // (INVENTORY CATEGORIES) CREATE
     if(createInventoryCategoryBtn) {
         createInventoryCategoryBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -270,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
-    // (AUTH) TABLE EVENT LISTENER (ELETE)
+    // (INVENTORY CATEGORIES) TABLE EVENT LISTENER (DELETE)
     if(inventoryCategoriesListDiv) {
         // api.getAllInventoryCategories, render.renderInventoryCategoriesTable, inventoryCategoriesListDiv
         loadData(api.getAllInventoryCategories, render.renderInventoryCategoriesTable, inventoryCategoriesListDiv);
@@ -293,6 +294,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         })
+    }
+    // (INVENTORY) TABLE EVENT LISTENER (UPDATE/DELETE)
+    if(inventoryListDiv) {
+        loadData(api.getAllInventory, render.renderInventoryTable, inventoryListDiv);
     }
 
 
