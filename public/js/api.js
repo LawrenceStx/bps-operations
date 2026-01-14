@@ -136,3 +136,131 @@ export async function checkSession(token) {
 
     return result.data;
 }
+
+
+
+
+
+
+// -----------------------------------------------------------
+// (INVENTORY) Get All Inventory Categories
+export async function getAllInventoryCategories(token) {
+    const response = await fetch('/api/inventory/category', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (INVENTORY) Create Inventory Category
+export async function createInventoryCategory(data, token) {
+    const response = await fetch('/api/inventory/category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+
+    const result = await response.json();
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (INVENTORY) Delete Inventory Category
+export async function deleteInventoryCategory(id, token) {
+    const response = await fetch(`/api/inventory/category/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+
+// (INVENTORY) Get All Inventory
+export async function getAllInventory(token) {
+    const response = await fetch('/api/inventory/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (INVENTORY) Create Inventory
+export async function createInventory(formData, token) {
+    const response = await fetch('/api/inventory', {
+        method: 'POST',
+        headers: {
+            'Authorization' : `Bearer ${token}`
+        },
+        body: formData
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
+// (INVENTORY) Delete Inventory Category
+export async function deleteInventory(id, token) {
+    const response = await fetch(`/api/inventory/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}
+// (INVENTORY) Delete Inventory Category
+export async function getInventory(id, token) {
+    const response = await fetch(`/api/inventory/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data);
+    }
+
+    return result.data;
+}

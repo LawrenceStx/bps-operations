@@ -64,3 +64,102 @@ export function renderAccountsTable(result, container) {
 
     container.appendChild(table)
 }
+
+
+// INVENTORY CATEGORIES
+export function renderInventoryCategoriesTable(result, container) {
+    container.innerHTML = ``;
+
+    const table = document.createElement('table')
+	table.className = 'inventory_categories table'
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector('tbody');
+    result.forEach(element => {
+        const row = document.createElement('tr');
+        row.dataset.id = element.id;
+        row.classname = 'inventory-category-item';
+
+        row.innerHTML = `
+            <td>${element.name}</td>
+            <td>${element.description}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class='btn delete-btn'>Delete</button>
+                </div>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+    if(result.length < 1) {
+        tbody.innerHTML = `
+            <td colspan="3" class="no-data" style="text-align:center;">There is no data here..</td>
+        `
+    }
+
+    container.appendChild(table)
+}
+// INVENTORY
+export function renderInventoryTable(result, container) {
+    container.innerHTML = ``;
+
+    const table = document.createElement('table')
+	table.className = 'inventory table'
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Min. Stock Level</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector('tbody');
+    result.forEach(element => {
+        const row = document.createElement('tr');
+        row.dataset.id = element.id;
+        row.classname = 'inventory-item';
+
+        row.innerHTML = `
+            <td>${element.id}</td>
+            <td>${element.name}</td>
+            <td>${element.category_id}</td>
+            <td>${element.quantity}</td>
+            <td>${element.min_stock_level}</td>
+            <td>
+                <img src=${element.image_url} style="height: 100px;">
+            </td>
+            <td>
+                <div class="action-buttons">
+                    <button class='btn edit-btn'>Edit</button>
+                    <button class='btn delete-btn'>Delete</button>
+                </div>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+    if(result.length < 1) {
+        tbody.innerHTML = `
+            <td colspan="7" class="no-data" style="text-align:center;">There is no data here..</td>
+        `
+    }
+
+    container.appendChild(table)
+}

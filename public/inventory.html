@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory - BPS Records Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Welcome</h1>
+                <p>BPS Records Management System</p>
+            </div>
+
+            <div class="sidebar-content">
+                <a class="nav-item" href="dashboard.html">
+                    <img src="../">
+                    <label>Dashboard</label>
+                </a>
+                <a class="nav-item" href="audit-log.html">
+                    <img src="../">
+                    <label>Audit Log</label>
+                </a>
+                <a class="nav-item active" href="inventory.html">
+                    <img src="../">
+                    <label>Inventory</label>
+                </a>
+                <a class="nav-item" href="reports.html">
+                    <img src="../">
+                    <label>Reports</label>
+                </a>
+                <a class="nav-item" href="sellers.html">
+                    <img src="../">
+                    <label>Sellers</label>
+                </a>
+                <a class="nav-item" href="rts.html">
+                    <img src="../">
+                    <label>Returned-to-Seller</label>
+                </a>
+                <a class="nav-item" href="documents.html">
+                    <img src="../">
+                    <label>Documents</label>
+                </a>
+                <a class="nav-item admin-nav" href="sales.html">
+                    <img src="../">
+                    <label>Sales</label>
+                </a>
+                <a class="nav-item admin-nav" href="accounts.html">
+                    <img src="../">
+                    <label>Accounts</label>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="logout-button">Logout</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="main-header">
+                <h1>Manage Inventory</h1>
+            </div>
+
+            <div class="main">
+                <div class="inventory-category-wrapper">
+                    <div class="inventory-category-form-wrapper">
+                        <button id="create-inventory-category-btn">Add New Category</button>
+
+                        <div class="form-wrapper">
+                            <form id="inventory-category-form">
+                                <h3 id="form-title">Create New Inventory Category</h3>
+
+                                <input type="text" id="inventory-category-id" style="display: none;">
+
+                                <div class="form-item">
+                                    <label>Name</label>
+                                    <input type="text" id="inventory-category-name" placeholder="Enter inventory category name..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Description</label>
+                                    <textarea cols="30" rows="6" id="inventory-category-description" placeholder="Enter inventory category description.." style="font-family: sans-serif;"></textarea>
+                                </div>
+
+                                <button type="submit">Submit</button>
+                                <button type="button" id="cancel-inventory-category-btn">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="inventory-category-list">
+
+                    </div>
+                </div>
+
+                <div class="inventory-wrapper">
+                    <div class="inventory-form-wrapper">
+                        <button id="create-inventory-btn">Add New Item</button>
+                        
+                        <div class="form-wrapper">
+                            <form id="inventory-form">
+                                <h3 id="form-title">Create New Inventory Category</h3>
+
+                                <input type="text" id="inventory-id" style="display: none;">
+
+                                <div class="form-item">
+                                    <label>Name</label>
+                                    <input type="text" id="inventory-name" placeholder="Enter inventory item name..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Inventory Category</label>
+                                    <input type="text" id="inventory-category" placeholder="Enter inventory category..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Quantity</label>
+                                    <input type="text" id="inventory-quantity" placeholder="Enter inventory quantity..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Minimum Stock Level</label>
+                                    <input type="text" id="inventory-minstock" placeholder="Enter minimum stock level..">
+                                </div>
+
+                                <div class="form-item">
+                                    <label>Image</label>
+                                    <input type="file" id="inventory-image" accept="image/*">
+                                    <img src="" class="inventory-image" style="height: 100px; display: none;"/>
+                                </div>
+
+                                <button type="submit">Submit</button>
+                                <button type="button" id="cancel-inventory-btn">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="inventory-list">
+
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="main-footer">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>
