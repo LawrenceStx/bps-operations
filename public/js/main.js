@@ -309,6 +309,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const inventory_id = row.dataset.id;
             const token = JSON.parse(localStorage.getItem('token'));
 
+            console.log(inventory_id)
+
+            if(e.target.classList.contains('edit-btn')) {
+                inventoryForm.reset();
+                inventoryForm.style.display = "block"
+                cancelInventoryBtn.style.display = "block"
+                inventoryForm.querySelector('.inventory-image').style.display = "block"
+
+                const inventoryItem = await api.getInventory(inventory_id, token)
+                inventoryForm.querySelector('#form-title').innerText = "Update Existing Inventory Item"
+
+                inventoryForm.querySelector('#inventory-name').value = inventoryItem.name
+                inventoryForm.querySelector('#inventory-category').value = inventoryItem.category_id;
+                inventoryForm.querySelector('#inventory-quantity').value = inventoryItem.quantity; 
+                inventoryForm.querySelector('#inventory-minstock').value = inventoryItem.min_stock_level;
+
+                
+                inventoryForm.querySelector('.inventory-image').src = inventoryItem.image_url;
+
+                inventoryForm.querySelector('#inventory-id').value = inventoryItem.id;
+            }
+
             if(e.target.classList.contains('delete-btn')) {
                 if(confirm("Are you sure you want to delete this inventory item?")) {
                     try {
@@ -339,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             inventoryForm.reset();
             inventoryForm.style.display = "none";
             cancelInventoryBtn.style.display = "none";
+            inventoryForm.querySelector('.inventory-image').style.display = "none"
         })
     }
     if(inventoryForm) {

@@ -117,6 +117,28 @@ const deleteInventory = async (req, res) => {
         res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`});
     }
 }
+// 1. gawa ka muna getInventory
+// 2. gawan mo ng route getInventory
+// 3. gawan mo ng api getInventory
+// 4. add mo sa event listener ng inventory div
+
+// 5. gawa ka updateInventory, gawan mo route, gawan mo api
+const getInventory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if(!id) {
+            return res.status(400).json({success:false,data:"ID is required, fix your API."});
+        }
+
+        const item = await get(`
+            SELECT id, name, category_id, quantity, min_stock_level, staff_id, image_url FROM inventory
+        `);
+
+        res.status(201).json({success:true,data:item});
+    } catch(err) {
+        res.status(500).json({success:false,data:`Internal Server Error: ${err.message}`})
+    }
+}
 
 
 module.exports = {
@@ -126,5 +148,6 @@ module.exports = {
 
     getAllInventory,
     createInventory,
-    deleteInventory
+    deleteInventory,
+    getInventory
 }
