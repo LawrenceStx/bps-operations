@@ -1,76 +1,378 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
+:root {
+    --primary: #2563eb;       /* Royal Blue */
+    --primary-hover: #1d4ed8;
+    --bg-body: #f9fafb;       /* Very Light Gray */
+    --bg-surface: #ffffff;    /* White */
+    --text-main: #111827;     /* Dark Gray */
+    --text-muted: #6b7280;    /* Muted Gray */
+    --border: #e5e7eb;        /* Light Border */
+    --danger: #ef4444;        /* Red */
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --radius: 6px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: 1px solid red;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+/* =========================================
+   2. LAYOUT
+   ========================================= */
 .content {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden; /* Prevents double scrollbars */
 }
 
-.main-content {
-    flex-grow: 1;
-}
-
-.active {
-    background-color: yellow;
-}
-
-
-
-
-
-
-
-
-
-
-/* SIDEBAR, CONTENT STYLES */
+/* Sidebar Styling */
 .sidebar {
+    width: 250px;
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    flex-basis: 300px;
-    padding: 15px;
-    gap: 2rem;
+    padding: 1.5rem;
+    flex-shrink: 0;
 }
+
+.sidebar-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h1 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.sidebar-header p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    gap: 1rem;
+    gap: 0.5rem;
     flex-grow: 1;
-}
-.sidebar-footer button {
-    padding: 15px;
-    width: 100%;
-}
-.sidebar-footer button:hover {
-    background-color: gray;
-    color: white;
+    overflow-y: auto;
 }
 
 .nav-item {
-    padding: 5px;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    font-weight: 500;
 }
+
 .nav-item:hover {
-    background-color: gray;
+    background-color: #f3f4f6;
+    color: var(--text-main);
+}
+
+.nav-item.active {
+    background-color: #eff6ff;
+    color: var(--primary);
+}
+
+.nav-item img {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.sidebar-footer button {
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--danger);
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: 0.2s;
+}
+
+.sidebar-footer button:hover {
+    background-color: #fef2f2;
+}
+
+/* Main Content Styling */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allows scrolling specifically in main area */
+}
+
+.main-header {
+    background-color: var(--bg-surface);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.main-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.main {
+    padding: 2rem;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* =========================================
+   3. FORMS (THE CARD STYLE)
+   ========================================= */
+
+/* The wrapper just holds the form, we don't hide this anymore */
+.form-wrapper {
+    margin: 1rem 0;
+}
+
+/* 
+   We target the specific IDs you use in JS.
+   We set display: none initially, but JS will override this to 'block'.
+   When 'block', it will look like a nice card.
+*/
+#account-form,
+#inventory-category-form,
+#inventory-form {
+    display: none; /* Controlled by JS */
+    background-color: var(--bg-surface);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+/* Form Typography */
+#form-title {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.form-item {
+    margin-bottom: 1rem;
+}
+
+.form-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+
+.form-item input,
+.form-item select,
+.form-item textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-item input:focus,
+.form-item select:focus,
+.form-item textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Hide cancel buttons initially via CSS if needed, though JS toggles them */
+#cancel-account-btn,
+#cancel-inventory-category-btn,
+#cancel-inventory-btn {
+    display: none;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    margin-left: 0.5rem;
+}
+#cancel-account-btn:hover,
+#cancel-inventory-category-btn:hover,
+#cancel-inventory-btn:hover {
+    background-color: #f3f4f6;
+    color: var(--text-main);
+}
+
+/* Submit Buttons in forms */
+button[type="submit"] {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+button[type="submit"]:hover {
+    background-color: var(--primary-hover);
+}
+
+/* =========================================
+   4. TABLES
+   ========================================= */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-top: 1rem;
+}
+
+.table thead {
+    background-color: #f9fafb;
+    border-bottom: 1px solid var(--border);
+}
+
+.table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Action Buttons inside Table */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.edit-btn {
+    background-color: #eff6ff;
+    color: var(--primary);
+}
+.edit-btn:hover { background-color: #dbeafe; }
+
+.delete-btn {
+    background-color: #fef2f2;
+    color: var(--danger);
+}
+.delete-btn:hover { background-color: #fee2e2; }
+
+/* Images in Table/Form */
+.inventory-image {
+    display: block;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border);
+}
+
+/* =========================================
+   5. BUTTONS (Top Level)
+   ========================================= */
+#create-account-btn,
+#create-inventory-category-btn,
+#create-inventory-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+#create-account-btn:hover,
+#create-inventory-category-btn:hover,
+#create-inventory-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* =========================================
+   6. LOGIN PAGE
+   ========================================= */
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.image-area {
+    width: 60%;
+    background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
 }
 
+.form-area {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
 
+#login-form {
+    width: 100%;
+    max-width: 350px;
+    padding: 2rem;
+}
 
+#login-form h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
 
-
-
-#account-form,
-#inventory-category-form,
-#cancel-account-btn,
-#cancel-inventory-category-btn,
-#inventory-form,
-#cancel-inventory-btn {
-    display: none;
+#login-form p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
 }
