@@ -910,6 +910,19 @@ button[type="submit"]:hover {
 
 .table.accounts .action-buttons .edit-btn { top: -45px; }
 .table.accounts .action-buttons .delete-btn { top: -5px; }
+
+.enable-btn {
+    background-color: #d1fae5; /* Light mint green */
+    color: #047857; /* Dark green text */
+}
+
+.enable-btn:hover {
+    background-color: #a7f3d0;
+}
+
+/* Update the action menu positioning for the new button */
+/* Ensure the popup menu handles the enable button correctly */
+.table.accounts .action-buttons .enable-btn { top: 35px; } 
 .table.accounts .action-buttons .disable-btn { top: 35px; }
 
 .table.accounts .action-buttons:hover .btn {
@@ -934,29 +947,45 @@ button[type="submit"]:hover {
 .table.accounts .disable-btn:hover { color: #6b7280; }
 
 /* Account Form (Side Panel) */
-#account-form {
+#account-form,
+#inventory-form,
+#inventory-category-form,
+#seller-form,  /* <--- Added */
+#rts-form      /* <--- Added */
+{
     display: none;
     background-color: var(--bg-surface);
     padding: 2rem;
     border: 1px solid #e5e7eb;
     border-radius: 20px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    width: 380px;
+    width: 380px; /* This limits the width so the image doesn't get huge */
     margin-left: 2.5rem;
+    flex-shrink: 0; /* Prevents it from squishing if screen is small */
 }
 
 #account-form button[type="submit"] {
     background-color: var(--secondary); 
 }
 
-#cancel-account-btn {
+#cancel-account-btn,
+#cancel-inventory-btn,
+#cancel-inventory-category-btn,
+#cancel-seller-btn, /* <--- Added */
+#cancel-rts-btn     /* <--- Added */
+{
     display: none;
     background-color: white;
     color: #4b5563;
     border: 1px solid #d1d5db;
 }
 
-#cancel-account-btn:hover {
+#cancel-account-btn:hover,
+#cancel-inventory-btn:hover,
+#cancel-inventory-category-btn:hover,
+#cancel-seller-btn:hover, /* <--- Added */
+#cancel-rts-btn:hover     /* <--- Added */
+{
     background-color: #f3f4f6;
     color: #1f2937;
 }

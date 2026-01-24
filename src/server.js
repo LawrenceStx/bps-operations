@@ -13,6 +13,7 @@ if (!process.env.JWT_SECRET) {
 const authRoutes = require('./routes/authRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const sellerRoutes = require('./routes/sellerRoutes');
+const rtsRoutes = require('./routes/rtsRoutes');
 
 const app = express();
 const PORT = process.env.port || 3000;
@@ -29,6 +30,7 @@ initDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/seller', sellerRoutes);
+app.use('/api/rts', rtsRoutes);
 
 // Initial Routes
 app.listen(PORT, () => {
