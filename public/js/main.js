@@ -24,6 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const inventoryCategoriesListDiv = document.querySelector('#inventory-category-list');
     const inventoryListDiv = document.querySelector('#inventory-list');
 
+    // SELLERS
+    const sellerListDiv = document.querySelector('#seller-list');
+    const sellerForm = document.querySelector('#seller-form');
+    const createSellerBtn = document.querySelector('#create-seller-btn');
+    const cancelSellerBtn = document.querySelector('#cancel-seller-btn');
+
+    // RTS
+    const rtsListDiv = document.querySelector('#rts-list');
+    const rtsForm = document.querySelector('#rts-form');
+    const createRtsBtn = document.querySelector('#create-rts-btn');
+    const cancelRtsBtn = document.querySelector('#cancel-rts-btn');
+
 
 
     // *********** HELPER FUNCTIONS *************
@@ -52,10 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-
-
-
-    // *********** RENDERERS *************
     async function loadData(api_method, render_method, div_container) {
         try {
             const token = JSON.parse(localStorage.getItem('token'));
@@ -408,6 +416,264 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Error: ${err.message}`)
             }
         })
+    }
+
+
+
+    // *********** SELLERS MANAGEMENT *************
+    // 1. LOAD DATA
+    if (sellerListDiv) {
+        loadData(api.getAllSellers, render.renderSellersTable, sellerListDiv);
+
+        // 2. TABLE EVENT DELEGATION (Edit/Delete)
+        sellerListDiv.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const row = e.target.closest('tr');
+            if (!row) return; // Safety check
+            
+            const id = row.dataset.id;
+            const token = JSON.parse(localStorage.getItem('token'));
+
+            // DELETE
+            if (e.target.classList.contains('delete-btn')) {
+                if (confirm("Are you sure you want to delete this seller profile?")) {
+                    try {
+                        await api.deleteSeller(id, token);
+                        location.reload();
+                    } catch (err) {
+                        alert(`Error: ${err.message}`);
+                    }
+                }
+            }
+
+            // EDIT
+            if (e.target.classList.contains('edit-btn')) {
+                try {
+                    const seller = await api.getSeller(id, token);
+                    
+                    sellerForm.reset();
+                    sellerForm.style.display = "block";
+                    cancelSellerBtn.style.display = "block";
+                    
+                    // Populate Form
+                    sellerForm.querySelector('#form-title').innerText = "Update Seller Profile";
+                    sellerForm.querySelector('#seller-id').value = seller.id;
+                    sellerForm.querySelector('#seller-name').value = seller.name;
+                    sellerForm.querySelector('#seller-category').value = seller.category;
+                    sellerForm.querySelector('#seller-platform').value = seller.platform_name;
+                    sellerForm.querySelector('#seller-contact').value = seller.contact_num;
+                    sellerForm.querySelector('#seller-email').value = seller.email;
+                    
+                    // Handle Image Preview
+                    const imgPreview = sellerForm.querySelector('.seller-image-preview');
+                    if(imgPreview) {
+                        imgPreview.src = seller.image_path || '';
+                        imgPreview.style.display = 'block';
+                    }
+
+                } catch (err) {
+                    alert(`Error loading seller details: ${err.message}`);
+                }
+            }
+        });
+    }
+    // 3. SHOW CREATE FORM
+    if (createSellerBtn) {
+        createSellerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sellerForm.reset();
+            sellerForm.style.display = "block";
+            cancelSellerBtn.style.display = "block";
+            sellerForm.querySelector('#form-title').innerText = "Add New Seller";
+            sellerForm.querySelector('#seller-id').value = "";
+            
+            const imgPreview = sellerForm.querySelector('.seller-image-preview');
+            if(imgPreview) imgPreview.style.display = 'none';
+        });
+    }
+    // 4. CANCEL FORM
+    if (cancelSellerBtn) {
+        cancelSellerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sellerForm.style.display = "none";
+            cancelSellerBtn.style.display = "none";
+        });
+    }
+    // 5. SUBMIT FORM
+    if (sellerForm) {
+        sellerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                let formData = new FormData();
+                
+                // Get values
+                formData.append('name', sellerForm.querySelector('#seller-name').value);
+                formData.append('category', sellerForm.querySelector('#seller-category').value);
+                formData.append('platform_name', sellerForm.querySelector('#seller-platform').value);
+                formData.append('contact_num', sellerForm.querySelector('#seller-contact').value);
+                formData.append('email', sellerForm.querySelector('#seller-email').value);
+                formData.append('staff_id', currentAccount.id);
+
+                // Image
+                const fileInput = sellerForm.querySelector('#seller-image');
+                if (fileInput.files[0]) {
+                    formData.append('image', fileInput.files[0]);
+                }
+
+                const id = sellerForm.querySelector('#seller-id').value;
+                const token = JSON.parse(localStorage.getItem('token'));
+
+                if (id) {
+                    await api.updateSeller(id, formData, token);
+                    alert('Seller updated successfully!');
+                } else {
+                    await api.createSeller(formData, token);
+                    alert('Seller created successfully!');
+                }
+
+                location.reload();
+            } catch (err) {
+                alert(`Error: ${err.message}`);
+            }
+        });
+    }
+
+
+
+
+    // *********** RTS (RETURN-TO-SELLER) MANAGEMENT *************
+    // 1. LOAD DATA
+    if (rtsListDiv) {
+        loadData(api.getAllRTS, render.renderRTSTable, rtsListDiv);
+
+        // 2. TABLE EVENT DELEGATION
+        rtsListDiv.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const row = e.target.closest('tr');
+            if (!row) return;
+
+            const id = row.dataset.id;
+            const token = JSON.parse(localStorage.getItem('token'));
+
+            // DELETE
+            if (e.target.classList.contains('delete-btn')) {
+                if (confirm("Delete this RTS record?")) {
+                    try {
+                        await api.deleteRTS(id, token);
+                        location.reload();
+                    } catch (err) {
+                        alert(`Error: ${err.message}`);
+                    }
+                }
+            }
+
+            if (e.target.classList.contains('edit-btn')) {
+                try {
+                    const rtsItem = await api.getRTS(id, token);
+                    const sellers = await api.getAllSellers(token);
+                    
+                    const selectBox = rtsForm.querySelector('#rts-seller-id');
+                    selectBox.innerHTML = '<option value="">Select a Seller...</option>';
+                    
+                    sellers.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.id;
+                        option.textContent = s.name;
+                        selectBox.appendChild(option);
+                    });
+
+                    rtsForm.reset();
+                    rtsForm.style.display = "block";
+                    cancelRtsBtn.style.display = "block";
+                    rtsForm.querySelector('#form-title').innerText = "Update RTS Log";
+
+                    rtsForm.querySelector('#rts-id').value = rtsItem.id;
+                    rtsForm.querySelector('#rts-tracking').value = rtsItem.tracking_no;
+                    rtsForm.querySelector('#rts-product').value = rtsItem.product_name;
+                    rtsForm.querySelector('#rts-customer').value = rtsItem.customer_name;
+                    rtsForm.querySelector('#rts-desc').value = rtsItem.description || '';
+
+                    selectBox.value = rtsItem.seller_id;
+
+                } catch (err) {
+                    console.error(err);
+                    alert("Error loading data: " + err.message);
+                }
+            }
+        });
+    }
+    // 3. SHOW CREATE FORM (And Populate Sellers Dropdown)
+    if (createRtsBtn) {
+        createRtsBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            // Fetch Sellers to populate the dropdown <select id="rts-seller-id">
+            try {
+                const token = JSON.parse(localStorage.getItem('token'));
+                const sellers = await api.getAllSellers(token);
+                
+                const selectBox = rtsForm.querySelector('#rts-seller-id');
+                selectBox.innerHTML = '<option value="">Select a Seller...</option>';
+                
+                sellers.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.id;
+                    option.textContent = s.name;
+                    selectBox.appendChild(option);
+                });
+
+                rtsForm.reset();
+                rtsForm.style.display = "block";
+                cancelRtsBtn.style.display = "block";
+                rtsForm.querySelector('#form-title').innerText = "Log Returned Item";
+                rtsForm.querySelector('#rts-id').value = "";
+
+            } catch(err) {
+                alert("Could not load sellers list.");
+            }
+        });
+    }
+    // 4. CANCEL FORM
+    if (cancelRtsBtn) {
+        cancelRtsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            rtsForm.style.display = "none";
+            cancelRtsBtn.style.display = "none";
+        });
+    }
+    // 5. SUBMIT FORM
+    if (rtsForm) {
+        rtsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const data = {
+                    tracking_no: rtsForm.querySelector('#rts-tracking').value,
+                    seller_id: rtsForm.querySelector('#rts-seller-id').value,
+                    customer_name: rtsForm.querySelector('#rts-customer').value,
+                    product_name: rtsForm.querySelector('#rts-product').value,
+                    description: rtsForm.querySelector('#rts-desc').value,
+                    status: 'pending', // Default
+                    staff_id: currentAccount.id
+                };
+
+                const id = rtsForm.querySelector('#rts-id').value;
+                const token = JSON.parse(localStorage.getItem('token'));
+
+                if (id) {
+                    await api.updateRTS(id, data, token);
+                    alert('RTS Log updated!');
+                } else {
+                    await api.createRTS(data, token);
+                    alert('Item logged successfully!');
+                }
+                
+                location.reload();
+            } catch (err) {
+                alert(`Error: ${err.message}`);
+            }
+        });
     }
 
 

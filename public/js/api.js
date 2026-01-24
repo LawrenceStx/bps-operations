@@ -281,3 +281,156 @@ export async function updateInventory(formData, id, token) {
 
     return result.data
 }
+
+
+
+
+
+
+
+
+
+// -----------------------------------------------------------
+// SELLER API (Uses FormData for Image Uploads)
+
+// (SELLER) Get All
+export async function getAllSellers(token) {
+    const response = await fetch('/api/seller', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (SELLER) Get One
+export async function getSeller(id, token) {
+    const response = await fetch(`/api/seller/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (SELLER) Create
+export async function createSeller(formData, token) {
+    const response = await fetch('/api/seller', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (SELLER) Update
+export async function updateSeller(id, formData, token) {
+    const response = await fetch(`/api/seller/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (SELLER) Delete
+export async function deleteSeller(id, token) {
+    const response = await fetch(`/api/seller/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+
+
+
+
+
+
+// -----------------------------------------------------------
+// RETURN-TO-SELLER (RTS) API (Uses JSON)
+
+// (RTS) Get All
+export async function getAllRTS(token) {
+    const response = await fetch('/api/rts', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (RTS) Create
+export async function createRTS(data, token) {
+    const response = await fetch('/api/rts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (RTS) Update
+export async function updateRTS(id, data, token) {
+    const response = await fetch(`/api/rts/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (RTS) Delete
+export async function deleteRTS(id, token) {
+    const response = await fetch(`/api/rts/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
+// (RTS) Get Single Item (For Editing)
+export async function getRTS(id, token) {
+    const response = await fetch(`/api/rts/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const result = await response.json();
+    if(!result.success) throw new Error(result.data);
+    return result.data;
+}
